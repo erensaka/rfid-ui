@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <title>RFID Bant Eki Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <img class="logo" alt="Ayık Band Logo"
+       src="https://www.konveyorbant.com/wp-content/themes/ayik-band/assets/image/logo/logo2.svg" />
+</header>
+
+<main class="container">
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- STEP 1: Modül Seçimi -->
+  <section id="step1" class="card step active">
+    <h1 class="title">Modül Seçimi</h1>
+
+    <div class="mod-grid">
+      <button class="mod" data-target="identification">
+        <svg viewBox="0 0 24 24" class="mod-ic" aria-hidden="true">
+          <path d="M12 2a5 5 0 0 1 5 5v2h1a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h1V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v2h6V7a3 3 0 0 0-3-3Z"/>
+        </svg>
+        <span>Veri Girişi</span>
+      </button>
+
+      <button class="mod" data-target="info">
+        <svg viewBox="0 0 24 24" class="mod-ic" aria-hidden="true">
+          <path d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h10v2H4v-2Z"/>
+        </svg>
+        <span>Ürün Bilgisi</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- STEP 2: EPC -->
+  <section id="step2" class="card step">
+    <h2 class="title">Veri Girişi — Ürün Tanımlama</h2>
+    
+
+    <div class="form">
+      <label class="form-label" for="epcInput">EPC</label>
+      <input id="epcInput" class="input" type="text" placeholder="örn: 3008 33B2 009A 0011 7C9F 0042" />
+    </div>
+
+    <div class="actions">
+      <button id="btnSimEPC" class="btn ghost">EPC’yi Simüle Et</button>
+      <button id="toStep3" class="btn">İleri</button>
+    </div>
+  </section>
+
+  <!-- STEP 3: Bilgi Girişi -->
+  <section id="step3" class="card step">
+    <h2 class="title">Veri Girişi — Bant Eki Bilgileri</h2>
+   
+
+    <div class="grid-form">
+      <div class="form">
+        <label class="form-label" for="durum">Durum</label>
+        <select id="durum" class="select">
+          <option value="Taslak">Taslak</option>
+          <option value="Onaylı">Onaylı</option>
+          <option value="Kullanımda" selected>Kullanımda</option>
+          <option value="Çıktı">Çıktı</option>
+        </select>
+      </div>
+
+      <!-- Müşteri & Hat: text input -->
+      <div class="form">
+        <label class="form-label" for="musteri">Müşteri</label>
+        <input id="musteri" class="input" type="text" placeholder="örn: Kolin Termik">
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="hat">Hat İsmi / No</label>
+        <input id="hat" class="input" type="text" placeholder="örn: Kömür Besleme #1">
+      </div>
+
+      <!-- Band ID üstlere çekildi -->
+      <div class="form">
+        <label class="form-label" for="bandId">Band ID (Sistem No)</label>
+        <input id="bandId" class="input" type="text" placeholder="AB-2024-000872">
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="marka">Bant Markası</label>
+        <select id="marka" class="select"></select>
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="karkas">Karkas Tipi</label>
+        <select id="karkas" class="select"></select>
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="kaplama">Kaplama Cinsi/Sınıfı</label>
+        <select id="kaplama" class="select"></select>
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="genislik">Bant Genişliği (mm)</label>
+        <input id="genislik" class="input" type="number" min="200" step="50" placeholder="1000">
+      </div>
+
+      <!-- MUKAVEMET ve KAT SAYISI AYRI -->
+      <div class="form">
+        <label class="form-label" for="mukavemet">Mukavemet (N/mm)</label>
+        <select id="mukavemet" class="select"></select>
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="kat">Kat Sayısı</label>
+        <select id="kat" class="select"></select>
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="ust">Üst Kaplama (mm)</label>
+        <input id="ust" class="input" type="number" step="0.5" min="0" placeholder="4">
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="alt">Alt Kaplama (mm)</label>
+        <input id="alt" class="input" type="number" step="0.5" min="0" placeholder="3">
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="ektipi">Ek Tipi</label>
+        <select id="ektipi" class="select">
+          <option>Adım (Step)</option>
+          <option>Parmak (Finger)</option>
+        </select>
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="ekboyu">Ek Boyu (mm)</label>
+        <div class="inline-input">
+          <input id="ekboyu" class="input" type="number" step="10" min="100" placeholder="420">
+          <div class="presets" data-for="ekboyu">
+            <button type="button" class="chip">300</button>
+            <button type="button" class="chip">400</button>
+            <button type="button" class="chip">500</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="pres">Pres Modeli</label>
+        <select id="pres" class="select">
+          <option>ALMEX SVP 1000</option>
+          <option selected>ALMEX SVP 1200</option>
+          <option>Almex</option>
+          <option>EPNUO</option>
+          <option>Diğer</option>
+        </select>
+      </div>
+
+      <div class="form">
+        <label class="form-label" for="epcText">EPC</label>
+        <input id="epcText" class="input" type="text" placeholder="3008 33B2 …">
+      </div>
+
+      <!-- Not gir & listele -->
+      <div class="form">
+        <label class="form-label" for="not">Gözlem Notu</label>
+        <div class="inline-input">
+          <textarea id="not" class="textarea" rows="3" placeholder="Ek bölgesinde kontrol yapıldı, sorun yok."></textarea>
+          <button id="addNoteBtn" type="button" class="btn small">Ekle</button>
+        </div>
+        <ul id="noteList" class="note-list"></ul>
+      </div>
+    </div>
+
+    <div class="block-head">
+      <h3>Vulkanizasyon Eğrisi (CSV)</h3>
+      <label class="btn small file">
+        <input id="curveInput" type="file" accept=".csv,.tsv,.txt"> CSV Yükle
+      </label>
+    </div>
+    <div class="chart-wrap"><canvas id="curveChart" width="800" height="400"></canvas></div>
+
+    <div class="block-head">
+      <h3>Fotoğraflar</h3>
+      <label class="btn small file">
+        <input id="photoInput" type="file" accept="image/*" multiple> Fotoğraf Yükle
+      </label>
+    </div>
+    <div id="photoGrid" class="photos"></div>
+
+    <div class="actions">
+      <button id="backTo2" class="btn ghost">Geri</button>
+      <button id="toStep4" class="btn">Özete Geç</button>
+    </div>
+  </section>
+
+  <!-- STEP 4: Özet -->
+  <section id="step4" class="card step">
+    <h2 class="title">Veri Girişi — Özet</h2>
+    <div class="table-wrap"><table class="summary"><tbody id="summaryBody"></tbody></table></div>
+    <div class="block-head"><h3>Fotoğraflar</h3></div>
+    <div id="summaryPhotos" class="photos photos--summary"></div>
+    <div class="actions">
+      <button id="backTo3" class="btn ghost">Geri</button>
+      <button id="approveBtn" class="btn">Kaydı Onayla</button>
+    </div>
+  </section>
+
+  <!-- ====================== ÜRÜN BİLGİSİ ====================== -->
+  <section id="info1" class="card step">
+    <h2 class="title">Ürün Bilgisi — EPC Seçimi</h2>
+    
+
+    <div class="form">
+      <label class="form-label" for="epcInfoInput">EPC</label>
+      <input id="epcInfoInput" class="input" type="text" placeholder="örn: 3008 33B2 009A 0011 7C9F 0042" />
+    </div>
+
+    <div class="actions">
+      <button id="btnSimEPCInfo" class="btn ghost">EPC’yi Simüle Et</button>
+      <button id="toInfo2" class="btn">Bilgileri Göster</button>
+    </div>
+  </section>
+
+  <section id="info2" class="card step">
+    <h2 class="title">Ürün Bilgisi — Özet</h2>
+
+    <div class="table-wrap"><table class="summary"><tbody id="infoSummaryBody"></tbody></table></div>
+
+    <div class="block-head">
+      <h3>Vulkanizasyon Eğrisi (CSV)</h3>
+      <label class="btn small file">
+        <input id="curveInputInfo" type="file" accept=".csv,.tsv,.txt"> CSV Yükle (opsiyonel)
+      </label>
+    </div>
+    <div class="chart-wrap"><canvas id="curveChartInfo" width="800" height="400"></canvas></div>
+
+    <div class="block-head">
+      <h3>Fotoğraflar</h3>
+      <label class="btn small file">
+        <input id="photoInputInfo" type="file" accept="image/*" multiple> Fotoğraf Yükle (opsiyonel)
+      </label>
+    </div>
+    <div id="photoGridInfo" class="photos"></div>
+
+    <!-- Ürün Bilgisi ekranında anlık gözlem girişi -->
+    <div class="form">
+      <label class="form-label" for="infoNote">Gözlem Notu (RFID okuma anı)</label>
+      <div class="inline-input">
+        <textarea id="infoNote" class="textarea" rows="2" placeholder="Yeni durum/tespit..."></textarea>
+        <button id="addInfoNoteBtn" type="button" class="btn small">Ekle</button>
+      </div>
+      <ul id="infoNoteList" class="note-list"></ul>
+    </div>
+
+    <div class="actions">
+      <button id="backToInfo1" class="btn ghost">Geri</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <button id="restart" class="btn wide">Baştan Başlat</button>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
